@@ -26,6 +26,7 @@ Use this skill when the user:
 npm install -g mcp-chrome-bridger
 # or
 pnpm install -g mcp-chrome-bridger
+mcp-chrome-bridger register
 ```
 
 ### Step 2: Install Chrome Extension

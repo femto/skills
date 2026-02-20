@@ -25,7 +25,7 @@ Use this skill when the user:
 # Python
 pip install worldbook
 
-# Node.js
+# or Node.js
 npm i -g worldbook
 ```
 
@@ -39,38 +39,36 @@ pip install -e .
 
 ## CLI Commands
 
-### Query Knowledge
-
-Search the worldbook knowledge base:
-
 ```bash
-worldbook query "What is the capital of France?"
-worldbook query "How to deploy a Next.js app"
-```
-
-### Add Knowledge
-
-Add new knowledge sources:
-
-```bash
-worldbook add --source "wikipedia" --topic "France"
-worldbook add --url "https://example.com/docs"
+worldbook --help  # Show all available commands
 ```
 
 ### Get Worldbook
 
-Retrieve a specific worldbook:
+Fetch a worldbook for a service (cached locally):
 
 ```bash
-worldbook get <worldbook-name>
+worldbook get stripe
+worldbook get github-api
+worldbook get openai
 ```
 
 ### Use a Worldbook
 
-Apply a worldbook's instructions:
+Get instructions for a specific action:
 
 ```bash
-worldbook use <worldbook-name>
+worldbook use stripe create-payment
+worldbook use github-api create-issue
+```
+
+### Search Worldbooks
+
+Search available worldbooks by keyword:
+
+```bash
+worldbook search payment
+worldbook search api
 ```
 
 ## Philosophy
@@ -110,21 +108,23 @@ No SDK. No protocol. No ceremony. Just **instructions**.
 
 ### As an AI Agent
 
-When a user asks for information, use worldbook to query:
+When a user asks about a service, use worldbook to get instructions:
 
 ```bash
-# User: "What's the weather API for tomorrow.io?"
-worldbook query "tomorrow.io weather API"
+# User: "How do I create a payment with Stripe?"
+worldbook get stripe
+worldbook use stripe create-payment
 
-# User: "How do I use the Stripe CLI?"
-worldbook get stripe-cli
+# User: "How do I use the GitHub API?"
+worldbook get github-api
+worldbook use github-api create-issue
 ```
 
-### Adding Knowledge for Others
+### Search for Services
 
 ```bash
-# Add a new service's worldbook
-worldbook add --name "my-service" --file ./WORLDBOOK.md
+# User: "What payment APIs are available?"
+worldbook search payment
 ```
 
 ## Resources

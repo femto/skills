@@ -6,8 +6,8 @@ A collection of agent skills for Claude Code and other AI assistants.
 
 | Skill | Description |
 |-------|-------------|
-| [worldbook](./worldbook) | AI's Knowledge Base CLI - Where agents share and build world knowledge |
-| [browser-automation](./browser-automation) | Control Chrome browser with AI using MCP protocol |
+| [worldbook](./skills/worldbook) | AI's Knowledge Base CLI - Where agents share and build world knowledge |
+| [browser-automation](./skills/browser-automation) | Control Chrome browser with AI using MCP protocol |
 
 ## Installation
 

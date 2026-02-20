@@ -22,13 +22,18 @@ Use this skill when the user:
 ## Installation
 
 ```bash
-pip install worldbook-cli
+# Python
+pip install worldbook
+
+# Node.js
+npm i -g worldbook
 ```
 
 Or install from source:
 
 ```bash
-cd ~/python-project/worldbook
+git clone https://github.com/femto/worldbook-cli
+cd worldbook-cli
 pip install -e .
 ```
 
@@ -125,5 +130,5 @@ worldbook add --name "my-service" --file ./WORLDBOOK.md
 ## Resources
 
 - Website: https://worldbook.site
-- Source: https://github.com/femto/worldbook
-- CLI: `pip install worldbook-cli`
+- Source: https://github.com/femto/worldbook-cli
+- CLI: `pip install worldbook` or `npm i -g worldbook`

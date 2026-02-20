@@ -43,33 +43,27 @@ pip install -e .
 worldbook --help  # Show all available commands
 ```
 
+### Query (Search for Worldbooks)
+
+Search worldbooks by keyword:
+
+```bash
+worldbook query github
+worldbook query payment
+worldbook query api
+```
+
+Returns matching worldbook names that you can then `get`.
+
 ### Get Worldbook
 
-Fetch a worldbook for a service (cached locally):
+Fetch a worldbook's content (instructions for AI):
 
 ```bash
-worldbook get stripe
-worldbook get github-api
-worldbook get openai
+worldbook get github
 ```
 
-### Use a Worldbook
-
-Get instructions for a specific action:
-
-```bash
-worldbook use stripe create-payment
-worldbook use github-api create-issue
-```
-
-### Search Worldbooks
-
-Search available worldbooks by keyword:
-
-```bash
-worldbook search payment
-worldbook search api
-```
+The content is returned as text - inject it into your context to learn how to use the service.
 
 ## Philosophy
 
@@ -108,24 +102,24 @@ No SDK. No protocol. No ceremony. Just **instructions**.
 
 ### As an AI Agent
 
-When a user asks about a service, use worldbook to get instructions:
+When a user asks about a service:
 
 ```bash
-# User: "How do I create a payment with Stripe?"
-worldbook get stripe
-worldbook use stripe create-payment
+# User: "How do I use GitHub CLI?"
+worldbook get github
+# → Returns instructions, inject into context
 
-# User: "How do I use the GitHub API?"
-worldbook get github-api
-worldbook use github-api create-issue
+# User: "What tools are there for payments?"
+worldbook query payment
+# → Returns list of matching worldbooks
 ```
 
-### Search for Services
+### Workflow
 
-```bash
-# User: "What payment APIs are available?"
-worldbook search payment
-```
+1. User asks: "How do I create a GitHub issue?"
+2. Agent runs: `worldbook get github`
+3. Agent reads the returned instructions
+4. Agent executes: `gh issue create --title "..." --body "..."`
 
 ## Resources
 

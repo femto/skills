@@ -1,86 +1,79 @@
 ---
 name: new-tag
-description: Prepare and publish a git release tag by inspecting the repo's release convention, bumping affected package versions, validating release builds, committing the release prep, pushing the branch, and pushing a new tag. Use when asked to bump project versions, cut a release, push a tag, or trigger tag-based GitHub Actions or npm publishing.
+description: Bump version in package.json and push a new tag to both minion-mind and minion-mind-releases repos. Use when the user says "new tag", "bump version", "release new version", or wants to create a new release tag.
 ---
 
-# New Tag
+# New Tag Skill
+
+Automate version bumping and tag creation for minion-mind releases.
+
+## Usage
+
+```
+/new-tag             # Default: commit all changes + bump version + tag
+/new-tag no-commit   # Only bump version and tag, don't commit pending changes
+```
 
 ## Workflow
 
-### Inspect the release convention
+### Default mode (with commit)
 
-- Check `git status --short`, the current branch, and recent tags before changing versions.
-- Inspect `.github/workflows/` for tag patterns such as `v*`, package filters, build jobs, and publish jobs.
-- Inspect package manifests and release scripts to determine which package version should drive the new tag.
+1. Check for uncommitted changes with `git status`
+2. If changes exist, show summary and commit all with descriptive message
+3. Get current version from package.json
+4. Increment patch version (e.g., 0.2.62 -> 0.2.63)
+5. Update package.json with new version
+6. Commit the version bump
+7. Push to origin
+8. Create and push tag to minion-mind repo
+9. Create and push same tag to minion-mind-releases repo
 
-### Choose the version plan
+### no-commit mode
 
-- Follow the repository's existing tag pattern unless the user explicitly wants to change it.
-- Bump only the packages affected by the release.
-- Bump shared packages when their changed code is consumed by a package that will be published from this tag.
-- Keep compatibility gates unchanged unless the new release actually requires a higher minimum version.
-- If the worktree contains unrelated changes, stop and ask before including them in the release.
+Skip steps 1-2, only do version bump and tagging.
 
-### Apply the version changes
-
-- Update package versions in manifest files.
-- Update release workflows, workspace filters, and package references when package names or published artifacts have changed.
-- Fix any packaging or TypeScript resolution issues discovered while preparing the release.
-
-### Validate before tagging
-
-- Run the builds required by the release workflow, not just a subset that happens to pass locally.
-- At minimum, build every package that the tag-triggered workflow will build or publish.
-- Do not create or push a tag while any required build is failing.
-
-### Commit and push the release prep
-
-- Stage only the files that belong in the release prep.
-- Use a clear release-oriented commit message such as `Prepare vX.Y.Z release`.
-- Push the branch before creating the tag so the tag points at a commit already on the remote.
-
-### Create and push the tag
-
-- Create an annotated tag that matches the workflow trigger, usually `vX.Y.Z`.
-- Push the tag explicitly.
-- Report the commit SHA, tag name, and any workflows that should now trigger.
-
-## Command Pattern
-
-Use this sequence as the default pattern and adapt it to the repo:
+## Commands
 
 ```bash
+# Check for uncommitted changes
 git status --short
-git tag --sort=-creatordate | head
-rg -n "tags:|push:|workflow_dispatch|publish|--filter" .github/workflows -g '*.yml' -g '*.yaml'
 
-# edit package versions and release metadata
+# Show change summary
+git diff --stat
 
-pnpm --filter <package-a> build
-pnpm --filter <package-b> build
-pnpm run <release-build-if-defined>
+# Commit all changes (default mode)
+git add -A
+git commit -m "Description of changes
 
-git add <release-files>
-git commit -m "Prepare vX.Y.Z release"
-git push origin <branch>
-git tag -a vX.Y.Z -m "vX.Y.Z"
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+
+# Get current version
+grep '"version"' /Users/femtozheng/python-project/minion-mind/package.json
+
+# Update version (replace OLD with NEW)
+sed -i '' 's/"version": "OLD"/"version": "NEW"/' /Users/femtozheng/python-project/minion-mind/package.json
+
+# Commit version bump
+git add package.json
+git commit -m "Bump version to X.Y.Z
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+git push
+
+# Create and push tag to minion-mind
+git tag vX.Y.Z
+git push origin vX.Y.Z
+
+# Create and push tag to minion-mind-releases
+cd /Users/femtozheng/python-project/minion-mind-releases
+git pull
+git tag vX.Y.Z
 git push origin vX.Y.Z
 ```
 
-## Heuristics
+## Notes
 
-- Prefer the version of the primary published package as the tag version.
-- If the repo already uses mixed version streams, keep using the stream implied by recent tags.
-- If a tag-triggered workflow still references old package names, fix that before tagging.
-- If a package publish job can skip already-published versions, still ensure the build jobs succeed so the GitHub release is not red.
-- If the release includes a browser extension and a native host, verify that packaging or ID compatibility changes do not break the published extension.
-
-## Output
-
-Return:
-
-- the packages that were bumped and their new versions
-- the validation commands that were run
-- the commit SHA
-- the pushed tag name
-- any residual release risk, if something was intentionally left unchanged
+- Always pull latest changes before starting
+- Tag format: `vX.Y.Z` (e.g., v0.2.63)
+- The minion-mind-releases tag triggers GitHub Actions to build the release
+- Default mode shows change summary before committing

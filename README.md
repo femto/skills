@@ -9,6 +9,7 @@ A collection of agent skills for Claude Code and other AI assistants.
 | [worldbook](./skills/worldbook) | AI's Knowledge Base CLI - Where agents share and build world knowledge |
 | [worldbook-webmcp](./skills/worldbook-webmcp) | Discover Worldbook WebMCP browser-page tools for third-party agents |
 | [browser-automation](./skills/browser-automation) | Control Chrome browser with AI using MCP protocol |
+| [git-as-memory](./skills/git-as-memory) | Store and audit agent memories in Git refs |
 
 ## Installation
 
@@ -16,6 +17,7 @@ A collection of agent skills for Claude Code and other AI assistants.
 npx skills add femto/skills@worldbook
 npx skills add femto/skills@worldbook-webmcp
 npx skills add femto/skills@browser-automation
+npx skills add femto/skills@git-as-memory
 ```
 
 ## License
